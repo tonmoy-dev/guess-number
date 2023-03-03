@@ -6,21 +6,29 @@ const checkBtnEl = document.querySelector(".check");
 const messageEl = document.querySelector(".message");
 const scoreEl = document.querySelector(".score");
 const highScoreEl = document.querySelector(".highscore");
+const bodyEl = document.querySelector("body");
 
 let score = 10;
-const secretNumber = Math.trunc(Math.random() * 20 + 1);
-secretNumberEl.textContent = secretNumber;
+let secretNumber = Math.trunc(Math.random() * 20 + 1);
+// secretNumberEl.textContent = secretNumber;
+
 // add event listener event to the check button element
 checkBtnEl.addEventListener("click", function () {
   // take input guess number and convert it string to number
   const guess = Number(guessNumberEl.value);
 
   guessNumberEl.value = "";
+
+  // when there is no input
   if (!guess) {
     messageEl.textContent = "Enter a number!";
-  } else if (guess === secretNumber) {
+  } // when a player wins
+  else if (guess === secretNumber) {
     messageEl.textContent = "Yay! Correct number.";
-  } else if (guess > secretNumber) {
+    bodyEl.style.backgroundColor = "#60b347";
+    secretNumberEl.textContent = secretNumber;
+  } // when guess is high
+  else if (guess > secretNumber) {
     if (score > 1) {
       score--;
       scoreEl.textContent = score;
@@ -30,7 +38,8 @@ checkBtnEl.addEventListener("click", function () {
       scoreEl.textContent = score;
       messageEl.textContent = "Game Over!";
     }
-  } else if (guess < secretNumber) {
+  } // when guess is low
+  else if (guess < secretNumber) {
     if (score > 1) {
       score--;
       scoreEl.textContent = score;
@@ -41,4 +50,16 @@ checkBtnEl.addEventListener("click", function () {
       messageEl.textContent = "Game Over!";
     }
   }
+});
+
+// reset Game
+againBtnEl.addEventListener("click", function () {
+  score = 10;
+  secretNumber = Math.trunc(Math.random() * 20 + 1);
+
+  messageEl.textContent = "Start guessing...";
+  scoreEl.textContent = score;
+  secretNumberEl.textContent = "?";
+  guessNumberEl.value = "";
+  bodyEl.style.backgroundColor = "#222";
 });
