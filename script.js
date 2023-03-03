@@ -10,9 +10,17 @@ const bodyEl = document.querySelector("body");
 
 let score = 10;
 let highScore = 0;
-let secretNumber = Math.trunc(Math.random() * 20 + 1);
+let secretNumber;
 // secretNumberEl.textContent = secretNumber;
 
+const generateRandomNumber = function () {
+  secretNumber = Math.trunc(Math.random() * 20 + 1);
+};
+const displayMessage = function (message) {
+  messageEl.textContent = message;
+};
+
+generateRandomNumber();
 // add event listener event to the check button element
 checkBtnEl.addEventListener("click", function () {
   // take input guess number and convert it string to number
@@ -22,17 +30,31 @@ checkBtnEl.addEventListener("click", function () {
 
   // when there is no input
   if (!guess) {
-    messageEl.textContent = "Enter a number!";
+    displayMessage("Enter a number!");
   } // when a player wins
   else if (guess === secretNumber) {
-    messageEl.textContent = "Yay! Correct number.";
+    displayMessage("Yay! Correct number.");
     bodyEl.style.backgroundColor = "#60b347";
     secretNumberEl.textContent = secretNumber;
     if (score > highScore) {
       highScore = score;
       highScoreEl.textContent = highScore;
     }
-  } // when guess is high
+  } // when the guess is wrong
+  else if (guess !== secretNumber) {
+    if (score > 1) {
+      score--;
+      scoreEl.textContent = score;
+      displayMessage(
+        guess > secretNumber ? "Too, high number!" : "Too, low number!"
+      );
+    } else {
+      score--;
+      scoreEl.textContent = score;
+      displayMessage("Game Over!");
+    }
+  }
+  /* // when guess is high
   else if (guess > secretNumber) {
     if (score > 1) {
       score--;
@@ -54,17 +76,20 @@ checkBtnEl.addEventListener("click", function () {
       scoreEl.textContent = score;
       messageEl.textContent = "Game Over!";
     }
-  }
+  }*/
 });
 
 // reset Game
 againBtnEl.addEventListener("click", function () {
   score = 10;
-  secretNumber = Math.trunc(Math.random() * 20 + 1);
+  generateRandomNumber();
 
-  messageEl.textContent = "Start guessing...";
+  // messageEl.textContent = "Start guessing...";
+  displayMessage("Start guessing...");
   scoreEl.textContent = score;
   secretNumberEl.textContent = "?";
   guessNumberEl.value = "";
   bodyEl.style.backgroundColor = "#222";
 });
+
+// Refactoring -> Re-structured => to improve the code and eleminate duplicate codes
